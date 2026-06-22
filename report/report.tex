@@ -16,30 +16,11 @@
 \usepackage{listings}
 \usepackage{subcaption}
 \usepackage{csquotes} 
+\let\cleardoublepage\clearpage
 
 \begin{document}
 \frontmatter\maketitle{}
 
-
-\begin{declarations}\end{declarations}
-
-
-
-\begin{abstract}
-	Abstract paragraphs should be unindented. Abstract text must fit on a single page. Try to present the essence of your work here. 
-	
-	According to Wikipedia\footnote{https://en.wikipedia.org/}, An abstract is a brief summary of a research article, thesis, review, conference proceeding, or any in-depth analysis of a particular subject and is often used to help the reader quickly ascertain the paper's purpose \cite{988366}. When used, an abstract always appears at the beginning of a manuscript or typescript, acting as the point-of-entry for any given academic paper or patent application. Abstracting and indexing services for various academic disciplines are aimed at compiling a body of literature for that particular subject.
-	
-	It is usually not a good practice to include references and footnotes in an abstract. Abstracts must be independent of other works, concise and complete in itself. 
-	
-	It is also possible to write structured abstracts. These are abstracts with distinct, labeled sections (e.g., Introduction, Methods, Results, Discussion), which makes it easier for the reader to navigate easily through the content. 
-	
-\end{abstract}
-
-
-\begin{acknowledgements}
-This is an \textbf{optional} page. Use your choice of paragraph style for text on this page. Usually, this space is for thanking your supporters and getting emotional about how grateful you are to everyone.  
-\end{acknowledgements}
 
 \addtoToC{Table of Contents}%
 \tableofcontents%
@@ -61,9 +42,9 @@ This is an \textbf{optional} page. Use your choice of paragraph style for text o
 
 \chapter{Introduction}\label{chap:introduction}
 
-The topic of choice chosen for this report was \textbf{Multimodal Large Language Models (LLMs) in Medical Imaging}.
-The reason for this choice is quite simple actually, in the last few months I personally took interest in the topic of locally runnable models.
-My goal for this report is to provide a brief overview of the topic as set out by task description, with extra focus on the open source aspect of the topic.
+The chosen topic for this report is \textbf{Multimodal Large Language Models (LLMs) in Medical Imaging}.
+It was selected because in the last few months a personal interest has been taken in locally runnable models.
+The goal for this report is to provide a brief overview of the topic as set out by task description, with extra focus on the open source aspects.
 Exploring it deeper through a practical project is not part of the task, but makes the report more interesting and engaging.
 
 \section{LLMs and the Move to Multimodality}
@@ -73,14 +54,12 @@ In fact, several artificial intelligence methods have been applied to a variety 
 While these are all very helpful tools for medical professionals, they can merely accelerate and assist decision-making due to their inflexible nature and lack of contextual understanding.
 It offers better insight for medical professionals to interpret, but lacks the actual "intelligence" to give a complex diagnosis or an actual proposal of a treatment plan.
 
-TODO: Figure showcasing classical AI methods in medical imaging.
-
 LLMs generally work by processing and generating text based on the input they receive and the the patterns they have learned during training on massive amounts of data.
 This training on diverse datasets allows them to understand a wide range of subjects and contexts, combined with their ability to generate coherent and contextually relevant human-like text that makes it a prime candidate for chatbot applications, virtual assistants, and other natural language processing tasks.
 This interpretation of the unimodal LLMs has the ability to reason and understand complex relationships between concepts, which is exacly what the classical AI methods in medical imaging lack.
 Only issue is that these unimodal LLMs are limited to processing and generating text.
 
-This is where Multimodal language models (MLLMs) come into play, as they are designed to process and depending on the model even generate multiple types of data, such as text, images, audio, and video.
+This is where Multimodal language models (MLLMs) come into play, as they are designed to process and depending on the model even generate multiple formats of data, such as text, images, audio, and video.
 For the introduction of MLLMs I will rely on the work of Nam et al., who described the concept of MLLMs compared to LLMs as the following:
 
 \begin{displayquote}[Nam et al. \textit{Multimodal Large Language Models in Medical Imaging: Current State and Future Directions}\cite{nam2025multimodal}]
@@ -90,14 +69,14 @@ For the introduction of MLLMs I will rely on the work of Nam et al., who describ
 	Consequently, MLLMs can tackle complex crossmodal tasks such as radiology report generation (RRG) from images and visual question answering (VQA) that incorporates both imaging and clinical context.
 \end{displayquote}
 
-\begin{figure}[htbp]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\textwidth]{src/multimodal.png}
     \caption{Visual representation of the training step of an MLLM (A) and the inference step of an MLLM (B). As adapted by Nam et al.\cite{nam2025multimodal}.}
     \label{fig:myimage}
 \end{figure}
 
-Multimodal LLMs have the potential to revolutionize the field of medical imaging by further empowering medical professionals with greater insights or even completely automating certain aspects of the diagnostic process.
+Multimodal LLMs have the potential to revolutionize the field of medical imaging by further empowering medical professionals with greater insights or even automating certain aspects of the diagnostic process.
 Instead of relying on multiple specialized unimodal models used for specific data types, MLLMs make use of multimodal encoders and connectors to transform non-textual data into a format that can be processed and understood by the underlying larger scale LLM.\cite{nam2025multimodal}
 In the above example of a CT scan, the raw image would first be encoded to make it easier to work with, and then the connector would transform the encoded image into a format that can be processed by the LLM, which can then generate a radiology report based on the image and any additional clinical context provided.
 
@@ -105,80 +84,226 @@ Following this brief overview of the technology, in the following chapters we wi
 
 \chapter{Research}\label{chap:research}
 
-Never stop experimenting.
+In this chapter, we first outline the main architectural patterns used in MLLMs for medical imaging and how they are typically trained.
+We then summarize current performance on key benchmarks, ranging from radiology quizzes and board examinations to large-scale clinical image challenges and emerging domain-specific MLLM benchmarks.
+This forms the basis for the subsequent discussion of challenges and limitations in Chapter~\ref{chap:challenges} and the open-source perspective in Chapter~\ref{chap:opensource}.
 
 \section{State of the Art - Models and Approaches}
 
-Never stop experimenting.
+Most MLLMs used in medical imaging follow a similar high-level design.
+A vision backbone (for example a convolutional neural network or a vision transformer) encodes the image into a sequence of visual tokens, which are then projected into the token space of a large language model.
+The LLM processes both the projected visual tokens and textual tokens (clinical history, questions, or instructions) in a unified sequence, enabling joint reasoning over images and text.
+In many systems the language model itself is largely unchanged, and the visual encoder plus projection layer are the main components that are adapted to the medical domain.
+On the training side, two broad paradigms are common.
+
+\begin{enumerate}
+    \item Contrastive or alignment-based pre-training is used to bring images and text into a shared embedding space, typically using large collections of paired radiology images and reports. This step is closely related to work on foundation models and allows zero-shot transfer to tasks such as radiology report retrieval or coarse classification.
+    \item Instruction tuning or supervised fine-tuning is performed with task-specific data, for example radiology report generation (RRG), visual question answering (VQA), or exam-style multiple-choice questions. During this stage, models are exposed to clinical prompts and taught to follow instructions, justify their answers, or format outputs in a way that is useful for clinicians.
+\end{enumerate}
+
+The literature distinguishes between general-purpose MLLMs such as \textit{ChatGPT 5.4} and and medically specialized MLLMs such as those developed for specific medical applications like \textit{MiniGPT-Pancreas}.\cite{moglia2026minigpt}
+General-purpose models are trained predominantly on web data and only lightly adapted to medicine, as far as the training data includes medical text or images.
+In contrast, medical MLLMs extend pre-training on curated biomedical data resulting in models that are more tightly aligned with clinical terminology and diagnostic workflows.
+At the time of writing there seems to be a tradeoff one must choose between either using the best-in-class proprietary models that have greater reasoning and general knowledge, or using a speicalized medical model that has been trained on a smaller, but more relevant dataset, gaining domain-specific knowledge and recognition capabilites.
 
 \section{State of the Art - Performance and Benchmarks}
 
-\cite{hou2025one} - RSNA Case of the day / comparison of common models
+Defining the state of the art in medical MLLMs is complicated by the rapid pace of development and the lack of standardized measures of performance.
+Most recent studies showed that in the past year the proprietary frontier models were the best performing, such as \textit{Claude 3.7} or \textit{GPT-4o}.
+Since then, most of these models have been deprecated and superceeded by newer versions, making it difficult to compare results across studies or define what state-of-the-art means at any given moment.
+Instead, we focused on general performance trends and the types of benchmarks used to evaluate MLLMs in medical imaging, condensing the finding into the following table\ref{tab:benchmark-types}.
 
-\cite{nakaura2025performance} - performance of MLLMs on chest X-ray datasets
+\begin{table}[ht!]
+\centering
+\small
+\caption{Overview of benchmark types used to evaluate MLLMs in medical imaging.}
+\label{tab:benchmark-types}
+\begin{tabular}{p{1.8cm} p{3.5cm} p{2.75cm} p{2.75cm} p{3cm}}
+\hline
+\textbf{Benchmark type} & \textbf{Description} & \textbf{Benefits} & \textbf{Downsides} & \textbf{Example papers \& findings} \\
+\hline
+Quizzes intended for humans
+& Radiology quiz datasets, board-style examinations, and large-scale clinical image challenges originally designed for medical education or assessment. Examples include RSNA Case of the Day, national radiology board exams, and the NEJM Image Challenge.
+& Directly comparable to human expert performance; well-validated as educational tools; enable year-on-year progress tracking; NEJM provides a massive physician baseline.
+& Limited size and diversity; may not reflect real clinical workflows; single-institution or single-language bias; risk that models were exposed to cases during training.
+& Hou et al. (RSNA)\cite{hou2025one}, Nakaura et al. (Japanese Board Exam)\cite{nakaura2025performance}, Sheng et al.(NEJM Image Challenge)\cite{sheng2026multimodal}. MLLMs now match or may even exceed average physician accuracy on these benchmarks. \\
+\hline
+Purpose-built MLLM benchmarks
+& Benchmarks specifically designed to evaluate MLLM capabilities beyond simple diagnosis: general multimodal reasoning (MMMU, TVBench), medical image quality assessment (MedQ-Bench), and multi-stage clinical brain imaging workflows (OmniBrainBench).
+& Targeted evaluation of specific model weaknesses; probe perceptual abilities and multi-step reasoning not captured by exam-style tests; reveal "visual-to-clinical" gaps; drive focused model development.
+& Still experimental and evolving; limited number of models evaluated; often narrow in scope ( such as OmniBrainBench); lack standardized human baselines; do not yet represent full clinical complexity.
+& Liu et al. (MedQ-Bench: IQA)\cite{liu2025medq}, Peng et al. (OmniBrainBench: brain imaging)\cite{peng2026omnibrainbench}, LLM Stats leaderboard (MMMU/TVBench)\cite{llmstats2026}. Current MLLMs show unstable low-level perception and struggle with complex clinical reasoning workflows. \\
+\hline
+\end{tabular}
+\end{table}
 
-\cite{sheng2026multimodal} - NEJM multimodal LLM performance benchmarks
+In summary, the studies found show that multimodal LLMs have made striking progress in radiology-style question answering and can already match or exceed average human performance on certain exam-style benchmarks.
+At the same time, purpose-built benchmarks like MedQ-Bench and OmniBrainBench reveal substantial remaining weaknesses in low-level perception, quality assessment, and complex clinical reasoning.
+This tension between impressive headline accuracies and lacking domain-speicifc benchmark performance is an important backdrop for the discussion of challenges and limitations in the next chapter.
+Benchmarks generally, are not only important for measuring progress, but also for identifying weaknesses and guiding future research directions.
 
-\cite{llmstats2026} - general multimodal LLM performance benchmarks
+\chapter{Challenges and Limitations}\label{chap:challenges}
 
+Although MLLMs show impressive performance on carefully curated benchmarks, their use in medical imaging is constrained by a number of technical, ethical, and practical challenges.
+For defining the most important challenges, we heavily relied on the recent survey by Alsaad et al., which provides a comprehensive overview of the current limitations of MLLMs in health care.\cite{alsaad2024multimodal}
+In the following, we briefly highlight the most relevant issues found by them.
 
-Examples of papers proposing new benchmarks for MLLMs in medical imaging:
+A first group of challenges concerns the \emph{data} itself.
+MLLMs require large, diverse and well-labeled multimodal datasets to learn robust joint representations of images, text, and other signals, but such datasets are still scarce in medicine.\cite{alsaad2024multimodal}
+Images often come from single institutions or narrow patient populations, labels vary in quality, and many modalities are underrepresented.
+Aligning these heterogeneous sources, handling missing data and varying resolutions, and standardising formats across scanners and hospitals remain open problems.
+As a result, most current medical (specialized) MLLMs are trained on relatively small or biased datasets and may fail to generalize outside their development environments.
 
-\cite{liu2025medq} - MedQ - benchmark proposed to evaluate the performance of MLLMs in medical imaging tasks, shows that there is a long way to go before can be used as automated
-\cite{peng2026omnibrainbench} - Omnibrainbench - benchmark proposed to evaluate the performance of MLLMs in brain imaging tasks, shows a lot better performance for humans and highlights that open source models were lagging behind at the time of writing
+The second category of limitations is related to \emph{scale and computation}.
+Training and serving large multimodal models is computationally expensive, which restricts full-scale experimentation to a handful of industrial or very well-funded academic groups.\cite{alsaad2024multimodal}
+In many hospitals, even inference latency and GPU memory requirements are already a bottleneck, especially if models are to be run on-premise or embedded into time-critical workflows such as emergency radiology.
+There are already some promising approaches to address this issue, either via building smaller, task-specific MLLMs (e.g. MiniGPT-Pancreas\cite{moglia2026minigpt}), or via model compression and quantization techniques of larger models, local KV-caching, MTP and many other emerging methods.
 
-Never stop experimenting.
+A third set of issues concerns \emph{interpretability, robustness, and evaluation}.
+Like other large neural networks, MLLMs are essentially black boxes: they can produce correct answers without providing transparent reasoning, and they can fail in unexpected ways.\cite{alsaad2024multimodal}
+In medicine, this lack of interpretability is problematic, because clinicians are accountable for their decisions and need to understand when and why a model might be wrong.
+Moreover, many evaluations rely on multiple-choice questions or short VQA prompts and do not fully capture realistic clinical complexity.
+Benchmarks such as MedQ-Bench and OmniBrainBench explicitly try to move beyond this by probing low-level image quality reasoning or multi-stage brain imaging workflows, and both studies conclude that current MLLMs still make unstable or clinically unsafe errors despite good average scores.\cite{liu2025medq,peng2026omnibrainbench}
 
-\chapter{Challenges and Limitations}
+Finally, there are substantial \emph{ethical, legal, and organisational} challenges.
+Medical MLLMs must operate under strict privacy regulations (for example HIPAA in the United States and GDPR in Europe), yet they are trained on large volumes of sensitive data and have been shown to be vulnerable to data extraction and distillation.\cite{alsaad2024multimodal}
+Ensuring that training pipelines, storage solutions, and deployment setups truly protect patient confidentiality is non-trivial.
+In addition, biases in training data can lead to systematically worse performance for certain demographic groups, and there is still little understanding of how these biases manifest in multimodal settings.
+Questions of informed consent, liability when models make harmful recommendations, and the appropriate level of human oversight are far from resolved.
+Overall, while current results are promising from a pure accuracy perspective, these challenges jointly highlight that MLLMs are not ready for autonomous clinical decision-making and should be viewed as decision-support tools under close human supervision.
 
-Never stop experimenting.
+\chapter{Open Source}\label{chap:opensource}
 
-\cite{alsaad2024multimodal} - challenges and limitations of MLLMs in medical imaging
+Given the challenges outlined above, open-source MLLMs and datasets have started to play an increasingly important role in medical imaging research.
+Open models make it possible for hospitals and academic groups to inspect architectures, study failure modes, and adapt models to their own patient populations, which is difficult or impossible with closed proprietary systems.
+They also enable more reproducible science, as both code and weights can be shared with the community.
+Through their openness and offered freedom, they can address many of the issues outlined in the previous chapter, as summarized in Table~\ref{tab:opensource-vs-issues}.
 
-\cite{li2026gmai} - brings up the issue of not having enough medical data - tries solving the solution through GMAI-VL dataset specialized training
-\cite{moglia2026minigpt} - create a specialized MLLM based of pancreas imaging, shows that specialized models can outperform generalist models in specific tasks - demonstrates that compact MLLMs can rival specialized vision networks in pancreas imaging, offering an intuitive, language-driven tool for AI-assisted radiology
+\begin{table}[ht!]
+\centering
+\small
+\caption{How open-source MLLMs address key challenges in medical imaging.}
+\label{tab:opensource-vs-issues}
+\begin{tabular}{p{3cm} p{3.5cm} p{3.5cm} p{3.5cm}}
+\hline
+\textbf{Concern} & \textbf{Short issue recap} & \textbf{How open source helps} & \textbf{Examples} \\
+\hline
+Data
+& Scarce, biased, hard to integrate across sources.
+& Community-shared open datasets; federated fine-tuning without centralizing data.
+& GMAI-VL (5.5M image--text pairs), PubMedVision. \\
+\hline
+Scale \& computation
+& Training/inference costly; GPU limits in hospitals.
+& Quantization, smaller specialized models, local deployment on modest hardware.
+& MiniGPT-Pancreas, 4-bit quantized models. \\
+\hline
+Interpretability \& robustness
+& Black-box decisions; unreliable on real workflows.
+& Inspectable and open weights; community audits; reproducible benchmarks.
+& MedQ-Bench, OmniBrainBench (open evaluation). \\
+\hline
+Ethical, legal \& organisational
+& Privacy risks; bias; unclear liability.
+& On-premise deployment (no data leaves); transparent training; adaptable to local regulations.
+& GDPR/HIPAA-compliant local hosting. \\
+\hline
+\end{tabular}
+\end{table}
 
-\chapter{Open Source}
-
-\cite{chen-etal-2024-towards-injecting} - example of specializing open source MLLM models for medical imaging tasks
-
-Never stop experimenting.
-
-\section{Open VS Closed Source}
-
-Never stop experimenting.
-
-Relevance of Local Models in Practice - privacy, security, data protection, and compliance with regulations such as HIPAA and GDPR.
+While open-source models are still catching up to proprietary frontier models in terms of raw performance - and are expected to remain half a year to a year behind for the foreseeable future - they offer a unique combination of transparency, adaptability, and privacy-preserving deployment that is particularly attractive for medical applications.
 
 \section{Excurse: Running a Multimodal LLM Locally}
 
-Never stop experimenting.
+Having seen with the paper of Sheng et al. that NEJM cases are a fun and illustrative way of testing out MLLMs in medical imaging\cite{sheng2026multimodal} it seemed like a good idea to try and run a multimodal LLM locally on my machine and see how it performs.
+While this section is not a neccessary part of the report, it still provides a practical example of how easy it is to run such a model on one's own machine.
+One can imagine that if regular commercial laptops are able to reach great performance with MLLMs, healthcare institutions with greater budget and more powerful hardware will be able to run models locally that rival the performance of cloud-based ones, while still being able to comply with privacy and security regulations.
 
-nejm-02-05-26
-  Expected:      Pulmonary mucormycosis
-  No options:    Invasive pulmonary aspergillosis
-  With options:  Pulmonary mucormycosis
+Three recent cases were chosen, namely the cases from \textit{02-05-26}, \textit{03-19-26}, and \textit{06-04-26}, as they are all rather recent and involve X-ray scans we are used to seeing.
+Model of choice used was \textbf{Qwen3.6-35B-A3B}, which is one of the most popular small-scale vision capable open source model on HuggingFace as June 2026\cite{huggingfaceqwen362026}.
+A specific MLX capable, 4 bit quantized version of it is seamlessly runnable through \textbf{oMLX} on an M2 Max series Macbook Pro with 96GB of ram.\footnote{This model takes up at least 20\,GB of RAM. Readers with less memory may switch to a smaller model, such as Google's \textbf{gemma-4-12B-it} for similar performance and smaller memory footprint.}
+The code for the tests ran is available on this report's public GitHub repository\cite{repoS2IPBM6MOD2026}.
 
-nejm-03-19-26
-  Expected:      Walled-off pancreatic necrosis
-  No options:    Infected pancreatic necrosis (likely with gas formation/abscess)
-  With options:  Walled-off pancreatic necrosis
+A two step approach was taken, first simply handing the model the image input next to the description of the case, and then a second run with fresh context that also includes the selectable options for the diagnosis, both with instruction to keep the answer concise.
+For greater clarity, this is how the input looked like for the second run in the case \textit{02-05-26}:
 
-nejm-06-04-26
-  Expected:      Osteosarcoma
-  No options:    Osteosarcoma
-  With options:  Osteosarcoma
+\begin{displayquote}[New England Journal of Medicine - Image Challenge: February 05, 2026\cite{nejm020526}]
+    A 49-year-old man with acute myeloid leukemia who had been admitted to the hospital for induction chemotherapy was evaluated for prolonged neutropenic fever.
+	On physical examination, crackles were identified at the lung bases. Computed tomography of the chest is shown.
+	Empiric treatment with amphotericin B was started. After 2 weeks of treatment, repeat CT of the chest is shown.
+	What is the most likely diagnosis?
 
-  
+	- Cytomegalovirus pneumonia
+
+	- Leukemic pulmonary infiltrates
+
+	- Pulmonary bacterial abscesses
+
+	- Pulmonary mucormycosis
+
+	- Pulmonary tuberculosis
+
+	Please provide a concise answer.
+    State only the most likely diagnosis in one line.
+\end{displayquote}
+
+Given that the model's size and its general nature, the results were really great.
+Without the context of the selectable options, it got the exact diagnosis one time out of three and two times out out of three it gave a relevant or closely related diagnosis.
+(Lacking any real knowledge in the field of medicine, we cannot judge the closeness of the non-exact matches, but having had a separate AI model judge the results, it was determined that the non-exact matches were indeed relevant and closely related to the correct diagnosis.)
+When faced with the selectable options, the right answer was picked all three times as can be seen in Figure \ref{fig:NEJMdailycases}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{src/local-trial-results.png}
+    \caption{Summary of results for the locally ran NEJM daily cases with and without options.}
+    \label{fig:NEJMdailycases}
+\end{figure}
+
+Following this, we used two of the best models we could access from the LLM Stats list\cite{llmstats2026} to see how top-of-the-line cloud-based models fared against the locally ran model.
+This was done via each of the model provider's chat interface as was done by Sheng et al. \cite{sheng2026multimodal} and Hou et al. \cite{hou2025one} in their papers.
+I had to instruct these models to specifically not use toolcalls or search the internet for the answer, and seemingly we received the exact same results for all models.
+Both with and without the selectable options, the results were identical to the locally ran model, as can be seen in Table \ref{tab:model-comparison}.
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{l l l}
+        \hline
+        \textbf{Model} & \textbf{Without options} & \textbf{With options} \\
+        \hline
+        Qwen 3.6-35B-A3B & Invasive pulmonary aspergillosis & Pulmonary mucormycosis \\
+        Gemini 3.5 Flash & Invasive pulmonary aspergillosis & Pulmonary mucormycosis \\
+        GPT 5.4 & Invasive pulmonary aspergillosis & Pulmonary mucormycosis \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of model responses for the NEJM case \textit{02-05-26} with and without multiple choice options.}
+    \label{tab:model-comparison}
+\end{table}
+
+Obviously, this is not a scientific test and the results are not statistically significant in any way on a sample size of three, but it is still promising when compared with the 50\%+ accuracy of the people taking these daily tests on the NEJM website\cite{nejm020526}.
+One crucial point to note here is that we can not be sure that the models weren't trained on these specific cases to begin with, but given the recency of the cases and the hard cutoff that comes with our open source offline models, it is safe to assume that the model may have seen the image, but not the context of the case and question.
+
 \chapter{Conclusions and Future Outlook}
 
-Never stop experimenting.
+In this report, I reviewed the emerging field of MLLMs in medical imaging, with a particular focus on open-source, locally deployable models.
+Starting from the limitations of classical unimodal machine learning approaches, the report outlined how MLLMs combine visual encoders with large language models to jointly process images and text, enabling tasks such as radiology report generation, visual question answering, and exam-style diagnostic reasoning.\cite{nam2025multimodal,rajendran2025foundation}
+I then summarized recent state-of-the-art results on radiology quizzes, board examinations, and large-scale clinical challenges, followed by a discussion of major technical and ethical challenges, and finally explored how open-source models and datasets are beginning to address some of these issues.
 
-\cite{alsaad2024multimodal} - future outlook
+Literature suggests the MLLMs are already competitivie with human performance in certain aspects, but come with substantial limitations in various areas, meaning that they should only be used as decision-support tools under close human supervision at this time.
+There are several promising directions for future research and development, which when combined with the exponential growth of model capabilities in general, suggest that MLLMs will play an increasingly important role in medical imaging in the coming years.
+
+\begin{enumerate}
+    \item \textbf{Better benchmarks and evaluation.} Shift from exam-style benchmarks to comprehensive, workflow-aligned evaluations that include multi-stage reasoning, robustness, calibration, and human-AI interaction.\cite{liu2025medq,peng2026omnibrainbench}
+    \item \textbf{Data quality, privacy, and federated learning.} Move towards federated and privacy-preserving learning across distributed organisation, with synthetic data augmentation for rare cases.
+    \item \textbf{Interpretability and temporal explainability.} Develop explanation frameworks that track how evidence across modalities contributes to a diagnosis over time, and integrate clinician feedback into the training loop.\cite{alsaad2024multimodal}
+    \item \textbf{Regulatory frameworks and multidisciplinary collaboration.} Define acceptable performance thresholds, documentation requirements, and post-deployment monitoring through close collaboration between clinicians, researchers, IT staff, ethicists, and regulators.\cite{alsaad2024multimodal}
+    \item \textbf{Open-source models and local deployment.} Continue to develop and utilize open-source MLLMs that can be deployed on-premise for privacy and security reasosn, while possibly opening up for specific tasks securely to frontier cloud models.
+\end{enumerate}
 
 \chapter{Self-Reflection}
 
-Never stop experimenting.
+The report was a great opportunity to explore the topic of MLLMs not only in theory, but also in practice to some extent.
+The practical test of running a multimodal LLM locally was a fun and interesting experience, and it was great to see that the model performed well on the NEJM daily cases, even when run on a personal laptop.
+It also gave me a better understanding of the challenges and limitations of MLLMs in medical imaging, and the importance of open source models and datasets in advancing the field.
 
 \backmatter%
 	\addtoToC{Bibliography}
@@ -186,15 +311,4 @@ Never stop experimenting.
  \typeout{}
 	\bibliography{references}
 	
-
-\begin{appendices} % optional
-\chapter{Example Appendix 1}
-
-Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables. 
-
-\chapter{Example Appendix 2}
-
-Appendices should be used for supplemental information that does not form part of the main research. Remember that figures and tables in appendices should not be listed in the List of Figures or List of Tables. 
-	
-\end{appendices}
 \end{document}

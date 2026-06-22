@@ -122,6 +122,7 @@
 			   \includegraphics[width=1\textwidth]{imc.png}\\
 			   \vspace{2em}		   
                 \textcolor{imcorange}{\large\bfseries\ Bachelor Programme Informatics}\\
+                \textcolor{imcorange}{\large\bfseries\ S2\_IPBM6MOD - Image Processing and Visual Computing in Biology and Medicine}\\
                \vspace{2em}
                {\large\bfseries\ by}\\                                
                \vspace{1em}
@@ -129,11 +130,7 @@
                \\
                \vspace{1em}
                \vfill
-               {\large\bfseries\ for the award of academic degree}\\
-               {\Large\bfseries\ Bachelor of Science in Engineering (BSc)}\\
-               \vspace{2em}
-               {\large\bfseries\ under the supervision of}\\
-               {\Large\bfseries\@supervisor}\\
+
             
 		    \vfill
 		    \textcolor{imcgray}{\bfseries\ Submitted on \@submissiondate}\\

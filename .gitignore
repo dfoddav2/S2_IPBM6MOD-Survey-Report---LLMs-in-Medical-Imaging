@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Latex intermediate files
+*.aux
+*.log
+*.out
+*.toc
+*.gz
+*.toc
+*.lof
+*.fls
+*.fdb_latexmk
+*.lot
