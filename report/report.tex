@@ -44,7 +44,7 @@
 
 The chosen topic for this report is \textbf{Multimodal Large Language Models (LLMs) in Medical Imaging}.
 It was selected because in the last few months a personal interest has been taken in locally runnable models.
-The goal for this report is to provide a brief overview of the topic as set out by task description, with extra focus on the open source aspects.
+The goal for this report is to provide a brief overview of the topic as set out by the task description, with extra focus on the open source aspects.
 Exploring it deeper through a practical project is not part of the task, but makes the report more interesting and engaging.
 
 \section{LLMs and the Move to Multimodality}
@@ -54,7 +54,7 @@ In fact, several artificial intelligence methods have been applied to a variety 
 While these are all very helpful tools for medical professionals, they can merely accelerate and assist decision-making due to their inflexible nature and lack of contextual understanding.
 It offers better insight for medical professionals to interpret, but lacks the actual "intelligence" to give a complex diagnosis or an actual proposal of a treatment plan.
 
-LLMs generally work by processing and generating text based on the input they receive and the the patterns they have learned during training on massive amounts of data.
+LLMs generally work by processing and generating text based on the input they receive and the patterns they have learned during training on massive amounts of data.
 This training on diverse datasets allows them to understand a wide range of subjects and contexts, combined with their ability to generate coherent and contextually relevant human-like text that makes it a prime candidate for chatbot applications, virtual assistants, and other natural language processing tasks.
 This interpretation of the unimodal LLMs has the ability to reason and understand complex relationships between concepts, which is exacly what the classical AI methods in medical imaging lack.
 Only issue is that these unimodal LLMs are limited to processing and generating text.
@@ -63,10 +63,10 @@ This is where Multimodal language models (MLLMs) come into play, as they are des
 For the introduction of MLLMs I will rely on the work of Nam et al., who described the concept of MLLMs compared to LLMs as the following:
 
 \begin{displayquote}[Nam et al. \textit{Multimodal Large Language Models in Medical Imaging: Current State and Future Directions}\cite{nam2025multimodal}]
-    MLLMs extend these capabilities [of LLMs] by incorporating advanced computer vision modules and multimodal learning techniques. 
+    "MLLMs extend these capabilities [of LLMs] by incorporating advanced computer vision modules and multimodal learning techniques. 
 	The defining feature is their ability to integrate and align information across modalities, often mapping them into a shared representational space.
 	This synergy allows for a more comprehensive understanding than unimodal approaches permit.
-	Consequently, MLLMs can tackle complex crossmodal tasks such as radiology report generation (RRG) from images and visual question answering (VQA) that incorporates both imaging and clinical context.
+	Consequently, MLLMs can tackle complex crossmodal tasks such as radiology report generation (RRG) from images and visual question answering (VQA) that incorporates both imaging and clinical context."
 \end{displayquote}
 
 \begin{figure}[ht!]
@@ -86,7 +86,7 @@ Following this brief overview of the technology, in the following chapters we wi
 
 In this chapter, we first outline the main architectural patterns used in MLLMs for medical imaging and how they are typically trained.
 We then summarize current performance on key benchmarks, ranging from radiology quizzes and board examinations to large-scale clinical image challenges and emerging domain-specific MLLM benchmarks.
-This forms the basis for the subsequent discussion of challenges and limitations in Chapter~\ref{chap:challenges} and the open-source perspective in Chapter~\ref{chap:opensource}.
+This forms the basis for the subsequent discussion of challenges and limitations in Chapter \ref{chap:challenges} and the open-source perspective in Chapter \ref{chap:opensource}.
 
 \section{State of the Art - Models and Approaches}
 
@@ -101,8 +101,8 @@ On the training side, two broad paradigms are common.
     \item Instruction tuning or supervised fine-tuning is performed with task-specific data, for example radiology report generation (RRG), visual question answering (VQA), or exam-style multiple-choice questions. During this stage, models are exposed to clinical prompts and taught to follow instructions, justify their answers, or format outputs in a way that is useful for clinicians.
 \end{enumerate}
 
-The literature distinguishes between general-purpose MLLMs such as \textit{ChatGPT 5.4} and and medically specialized MLLMs such as those developed for specific medical applications like \textit{MiniGPT-Pancreas}.\cite{moglia2026minigpt}
-General-purpose models are trained predominantly on web data and only lightly adapted to medicine, as far as the training data includes medical text or images.
+The literature distinguishes between general-purpose MLLMs such as \textit{ChatGPT 5.4} and medically specialized MLLMs such as those developed for specific medical applications like \textit{MiniGPT-Pancreas}.\cite{moglia2026minigpt}
+General-purpose models are trained predominantly on general knowledge, web data and only lightly adapted to medicine.
 In contrast, medical MLLMs extend pre-training on curated biomedical data resulting in models that are more tightly aligned with clinical terminology and diagnostic workflows.
 At the time of writing there seems to be a tradeoff one must choose between either using the best-in-class proprietary models that have greater reasoning and general knowledge, or using a speicalized medical model that has been trained on a smaller, but more relevant dataset, gaining domain-specific knowledge and recognition capabilites.
 
@@ -145,7 +145,7 @@ Benchmarks generally, are not only important for measuring progress, but also fo
 \chapter{Challenges and Limitations}\label{chap:challenges}
 
 Although MLLMs show impressive performance on carefully curated benchmarks, their use in medical imaging is constrained by a number of technical, ethical, and practical challenges.
-For defining the most important challenges, we heavily relied on the recent survey by Alsaad et al., which provides a comprehensive overview of the current limitations of MLLMs in health care.\cite{alsaad2024multimodal}
+For defining the most important challenges, we relied heavily on the recent survey by Alsaad et al., which provides a comprehensive overview of the current limitations of MLLMs in health care.\cite{alsaad2024multimodal}
 In the following, we briefly highlight the most relevant issues found by them.
 
 A first group of challenges concerns the \emph{data} itself.
@@ -166,7 +166,7 @@ Moreover, many evaluations rely on multiple-choice questions or short VQA prompt
 Benchmarks such as MedQ-Bench and OmniBrainBench explicitly try to move beyond this by probing low-level image quality reasoning or multi-stage brain imaging workflows, and both studies conclude that current MLLMs still make unstable or clinically unsafe errors despite good average scores.\cite{liu2025medq,peng2026omnibrainbench}
 
 Finally, there are substantial \emph{ethical, legal, and organisational} challenges.
-Medical MLLMs must operate under strict privacy regulations (for example HIPAA in the United States and GDPR in Europe), yet they are trained on large volumes of sensitive data and have been shown to be vulnerable to data extraction and distillation.\cite{alsaad2024multimodal}
+Medical MLLMs must operate under strict privacy regulations (for example HIPAA in the United States and GDPR in Europe), yet they are trained on large volumes of sensitive data and have been shown to be vulnerable to weight exfiltration.\cite{alsaad2024multimodal}
 Ensuring that training pipelines, storage solutions, and deployment setups truly protect patient confidentiality is non-trivial.
 In addition, biases in training data can lead to systematically worse performance for certain demographic groups, and there is still little understanding of how these biases manifest in multimodal settings.
 Questions of informed consent, liability when models make harmful recommendations, and the appropriate level of human oversight are far from resolved.
@@ -177,7 +177,7 @@ Overall, while current results are promising from a pure accuracy perspective, t
 Given the challenges outlined above, open-source MLLMs and datasets have started to play an increasingly important role in medical imaging research.
 Open models make it possible for hospitals and academic groups to inspect architectures, study failure modes, and adapt models to their own patient populations, which is difficult or impossible with closed proprietary systems.
 They also enable more reproducible science, as both code and weights can be shared with the community.
-Through their openness and offered freedom, they can address many of the issues outlined in the previous chapter, as summarized in Table~\ref{tab:opensource-vs-issues}.
+Through their openness and offered freedom, they can address many of the issues outlined in the previous chapter, as summarized in Table \ref{tab:opensource-vs-issues}.
 
 \begin{table}[ht!]
 \centering
@@ -186,7 +186,7 @@ Through their openness and offered freedom, they can address many of the issues 
 \label{tab:opensource-vs-issues}
 \begin{tabular}{p{3cm} p{3.5cm} p{3.5cm} p{3.5cm}}
 \hline
-\textbf{Concern} & \textbf{Short issue recap} & \textbf{How open source helps} & \textbf{Examples} \\
+\textbf{Concern} & \textbf{Short issue recap} & \textbf{Solved through} & \textbf{Examples} \\
 \hline
 Data
 & Scarce, biased, hard to integrate across sources.
@@ -199,7 +199,7 @@ Scale \& computation
 & MiniGPT-Pancreas, 4-bit quantized models. \\
 \hline
 Interpretability \& robustness
-& Black-box decisions; unreliable on real workflows.
+& Black-box decisions; unreliable on real workflows.\cite{li2026gmai}
 & Inspectable and open weights; community audits; reproducible benchmarks.
 & MedQ-Bench, OmniBrainBench (open evaluation). \\
 \hline
@@ -216,15 +216,15 @@ While open-source models are still catching up to proprietary frontier models in
 \section{Excurse: Running a Multimodal LLM Locally}
 
 Having seen with the paper of Sheng et al. that NEJM cases are a fun and illustrative way of testing out MLLMs in medical imaging\cite{sheng2026multimodal} it seemed like a good idea to try and run a multimodal LLM locally on my machine and see how it performs.
-While this section is not a neccessary part of the report, it still provides a practical example of how easy it is to run such a model on one's own machine.
+While this section is not an obligatory part of the report, it still provides a practical example of how easy it is to run such a model on one's own machine.
 One can imagine that if regular commercial laptops are able to reach great performance with MLLMs, healthcare institutions with greater budget and more powerful hardware will be able to run models locally that rival the performance of cloud-based ones, while still being able to comply with privacy and security regulations.
 
 Three recent cases were chosen, namely the cases from \textit{02-05-26}, \textit{03-19-26}, and \textit{06-04-26}, as they are all rather recent and involve X-ray scans we are used to seeing.
-Model of choice used was \textbf{Qwen3.6-35B-A3B}, which is one of the most popular small-scale vision capable open source model on HuggingFace as June 2026\cite{huggingfaceqwen362026}.
+Model of choice used was \textbf{Qwen3.6-35B-A3B}, which is one of the most popular small-scale vision capable open source model on HuggingFace as of June 2026\cite{huggingfaceqwen362026}.
 A specific MLX capable, 4 bit quantized version of it is seamlessly runnable through \textbf{oMLX} on an M2 Max series Macbook Pro with 96GB of ram.\footnote{This model takes up at least 20\,GB of RAM. Readers with less memory may switch to a smaller model, such as Google's \textbf{gemma-4-12B-it} for similar performance and smaller memory footprint.}
 The code for the tests ran is available on this report's public GitHub repository\cite{repoS2IPBM6MOD2026}.
 
-A two step approach was taken, first simply handing the model the image input next to the description of the case, and then a second run with fresh context that also includes the selectable options for the diagnosis, both with instruction to keep the answer concise.
+A two step approach was taken, first simply handing the model the image input next to the description of the case, and then a second run with fresh context that also includes the selectable options for the diagnosis. Both cases included extra instruction to keep the answer concise.
 For greater clarity, this is how the input looked like for the second run in the case \textit{02-05-26}:
 
 \begin{displayquote}[New England Journal of Medicine - Image Challenge: February 05, 2026\cite{nejm020526}]
@@ -247,7 +247,7 @@ For greater clarity, this is how the input looked like for the second run in the
     State only the most likely diagnosis in one line.
 \end{displayquote}
 
-Given that the model's size and its general nature, the results were really great.
+Given the choice model's size and its general nature, the results were really great.
 Without the context of the selectable options, it got the exact diagnosis one time out of three and two times out out of three it gave a relevant or closely related diagnosis.
 (Lacking any real knowledge in the field of medicine, we cannot judge the closeness of the non-exact matches, but having had a separate AI model judge the results, it was determined that the non-exact matches were indeed relevant and closely related to the correct diagnosis.)
 When faced with the selectable options, the right answer was picked all three times as can be seen in Figure \ref{fig:NEJMdailycases}.
@@ -255,7 +255,7 @@ When faced with the selectable options, the right answer was picked all three ti
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\textwidth]{src/local-trial-results.png}
-    \caption{Summary of results for the locally ran NEJM daily cases with and without options.}
+    \caption{Summary of results for the locally ran NEJM cases with and without options.}
     \label{fig:NEJMdailycases}
 \end{figure}
 
@@ -279,16 +279,16 @@ Both with and without the selectable options, the results were identical to the 
     \label{tab:model-comparison}
 \end{table}
 
-Obviously, this is not a scientific test and the results are not statistically significant in any way on a sample size of three, but it is still promising when compared with the 50\%+ accuracy of the people taking these daily tests on the NEJM website\cite{nejm020526}.
-One crucial point to note here is that we can not be sure that the models weren't trained on these specific cases to begin with, but given the recency of the cases and the hard cutoff that comes with our open source offline models, it is safe to assume that the model may have seen the image, but not the context of the case and question.
+Obviously, this is not a scientific test and the results are not statistically significant in any way on a sample size of three, but it is still promising when compared with the 50\%+ accuracy of the people taking these tests on the NEJM website\cite{nejm020526}.
+One crucial point to note here is that we can not be sure that the models weren't trained on these specific cases to begin with, but given their recency and the hard cutoff that comes with our open source offline models, it is safe to assume that the model may have seen the image, but not in the context of the NEJM question.
 
 \chapter{Conclusions and Future Outlook}
 
-In this report, I reviewed the emerging field of MLLMs in medical imaging, with a particular focus on open-source, locally deployable models.
+In this report, the emerging field of MLLMs in medical imaging was reviewed, with a particular focus on open-source, locally deployable models.
 Starting from the limitations of classical unimodal machine learning approaches, the report outlined how MLLMs combine visual encoders with large language models to jointly process images and text, enabling tasks such as radiology report generation, visual question answering, and exam-style diagnostic reasoning.\cite{nam2025multimodal,rajendran2025foundation}
-I then summarized recent state-of-the-art results on radiology quizzes, board examinations, and large-scale clinical challenges, followed by a discussion of major technical and ethical challenges, and finally explored how open-source models and datasets are beginning to address some of these issues.
+Afterwards, recent state-of-the-art results were presented on radiology quizzes, board examinations, and large-scale clinical challenges, followed by a discussion of major technical and ethical challenges, and finally an exploration of how open-source models and datasets are beginning to address some of these issues.
 
-Literature suggests the MLLMs are already competitivie with human performance in certain aspects, but come with substantial limitations in various areas, meaning that they should only be used as decision-support tools under close human supervision at this time.
+Literature suggests that MLLMs are already competitivie with human performance in certain aspects, but come with substantial limitations in various areas, meaning that they should only be used as decision-support tools under close human supervision at this time.
 There are several promising directions for future research and development, which when combined with the exponential growth of model capabilities in general, suggest that MLLMs will play an increasingly important role in medical imaging in the coming years.
 
 \begin{enumerate}
@@ -302,7 +302,7 @@ There are several promising directions for future research and development, whic
 \chapter{Self-Reflection}
 
 The report was a great opportunity to explore the topic of MLLMs not only in theory, but also in practice to some extent.
-The practical test of running a multimodal LLM locally was a fun and interesting experience, and it was great to see that the model performed well on the NEJM daily cases, even when run on a personal laptop.
+The practical test of running a multimodal LLM locally was a fun and interesting experience, and it was great to see that the model performed well on the NEJM cases, even when run on a personal laptop.
 It also gave me a better understanding of the challenges and limitations of MLLMs in medical imaging, and the importance of open source models and datasets in advancing the field.
 
 \backmatter%

@@ -36,6 +36,9 @@ B.~Hou, P.~Mukherjee, V.~Batheja, K.~C. Wang, R.~M. Summers, and Z.~Lu, ``One ye
 {Hugging Face}, ``Qwen/qwen3.6-35b-a3b,'' 2026, accessed: 2026-06-20. [Online]. Available: \url{https://huggingface.co/Qwen/Qwen3.6-35B-A3B}
 \BIBentrySTDinterwordspacing
 
+\bibitem{li2026gmai}
+T.~Li, Y.~Su, W.~Li, B.~Fu, Z.~Chen, Z.~Huang, G.~Wang, C.~Ma, Y.~Chen, M.~Hu \emph{et~al.}, ``Gmai-vl \& gmai-vl-5.5 m: A large vision-language model and a comprehensive multimodal dataset towards general medical ai,'' in \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, vol.~40, no.~28, 2026, pp. 23\,177--23\,185.
+
 \bibitem{liu2025medq}
 J.~Liu, J.~Wei, W.~Qu, C.~Ma, J.~Ning, Y.~Li, Y.~Chen, X.~Luo, P.~Chen, X.~Gao \emph{et~al.}, ``Medq-bench: Evaluating and exploring medical image quality assessment abilities in mllms,'' \emph{arXiv preprint arXiv:2510.01691}, 2025.
 
